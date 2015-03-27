@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>PIZZA SPRINT for 30min</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            background: #eee;
+        }
+
+        .jumbotron {
+            background: none;
+        }
+
+        #task {
+            font-size: 800%;
+            padding-top: 100px;
+        }
+
+        #count {
+            font-size: 2500%;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#start').click(function () {
+                $('#task').text($('#inputTask').val());
+                var now = new Date();
+                endDate = new Date();
+                endDate.setTime($('#min').val() * 60 * 1000 + now.getTime());
+                console.log(endDate);
+                countDown();
+            });
+        });
+        function countDown() {
+            var nowDate = new Date();
+            var sands = endDate - nowDate;
+            var d = Math.floor(sands / (1000 * 60 * 60 * 24));
+            sands -= (d * (1000 * 60 * 60 * 24));
+            var h = Math.floor(sands / (1000 * 60 * 60));
+            sands -= (h * (1000 * 60 * 60));
+            var m = Math.floor(sands / (1000 * 60));
+            sands -= (m * (1000 * 60));
+            var s = Math.floor(sands / 1000);
+            if (endDate > nowDate) {
+                    $("#count").text(zero(m) + ':' + zero(s));
+            } else {
+                $("#count").text('Finish!');
+            }
+            // 指定ミリ秒ごとにループ
+            setTimeout(countDown, 1000);
+        }
+        function zero(n) {
+            if (n < 10) {
+                n = '0' + n
+            }
+            return n;
+        }
+
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">PIZZA SPRINT for 30min</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="task" id="inputTask">
+                <input type="text" class="form-control" placeholder="minutes" id="min">
+                <button class="btn btn-default" type="button" id="start">Go!</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <h1 id="task" class="col-xs-12 text-center">SPRINT!!</h1>
+        </div>
+        <div class="row">
+            <p id="count" class="col-xs-12 text-center">00:00</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
