@@ -50,7 +50,6 @@
                 $(this).addClass('active');
                 $('#inputPhase').val($('h4', this).contents().eq(0).text());
                 $('#inputMin').val($('h4 .min', this).text().match(/\d+/));
-                console.log($('h4', this).contents());
             });
         });
         function start(p, m) {
@@ -114,6 +113,7 @@
             </div>
             <div class="list-group col-md-3">
 
+                <!-- h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
                 <a href="#" class="list-group-item active">
                     <h4 class="list-group-item-heading">条件設定<span class="min">(5分)</span></h4>
                     <ul class="list-group-item-text">
