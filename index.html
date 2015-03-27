@@ -11,30 +11,54 @@
 
         .jumbotron {
             background: none;
-        }
-
-        #task {
-            font-size: 800%;
             padding-top: 100px;
         }
 
+        #phase {
+            font-size: 800%;
+        }
+
         #count {
-            font-size: 2500%;
+            font-size: 2000%;
+        }
+
+        .list-group-item-text {
+            display: none;
+        }
+
+        .active .list-group-item-text {
+            display: inherit;
+        }
+
+        .min {
+            padding-left: 1rem;
         }
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
     <script>
         $(function () {
+            // ヘッダーフォームボタン
             $('#start').click(function () {
-                $('#task').text($('#inputTask').val());
-                var now = new Date();
-                endDate = new Date();
-                endDate.setTime($('#min').val() * 60 * 1000 + now.getTime());
-                console.log(endDate);
-                countDown();
+                start($('#inputPhase').val(), $('#inputMin').val());
+            });
+            // フェーズリストアコーディオン
+            $('.list-group-item').click(function () {
+                $('.list-group-item').each(function () {
+                    $(this).removeClass('active');
+                });
+                $(this).addClass('active');
+                $('#inputPhase').val($('h4', this).text().match(/.+(?=\(\w+\))/));
+                $('#inputMin').val($('h4 .min', this).text().match(/\d+/));
             });
         });
+        function start(p, m) {
+            $('#phase').text(p);
+            var now = new Date();
+            endDate = new Date();
+            endDate.setTime(m * 60 * 1000 + now.getTime());
+            countDown();
+        }
         function countDown() {
             var nowDate = new Date();
             var sands = endDate - nowDate;
@@ -45,12 +69,14 @@
             var m = Math.floor(sands / (1000 * 60));
             sands -= (m * (1000 * 60));
             var s = Math.floor(sands / 1000);
+            var txt = 'Finish!';
             if (endDate > nowDate) {
-                    $("#count").text(zero(m) + ':' + zero(s));
-            } else {
-                $("#count").text('Finish!');
+                txt = zero(m) + ':' + zero(s);
+                if (h > 0) {
+                    txt = zero(h) + ':' + txt;
+                }
             }
-            // 指定ミリ秒ごとにループ
+            $("#count").text(txt);
             setTimeout(countDown, 1000);
         }
         function zero(n) {
@@ -59,7 +85,6 @@
             }
             return n;
         }
-
     </script>
 </head>
 <body>
@@ -70,22 +95,69 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="task" id="inputTask">
-                <input type="text" class="form-control" placeholder="minutes" id="min">
+                <input type="text" class="form-control" placeholder="phase" id="inputPhase">
+                <input type="text" class="form-control" placeholder="minutes" id="inputMin">
                 <button class="btn btn-default" type="button" id="start">Start!</button>
             </form>
         </div>
     </div>
+
 </nav>
 <div class="jumbotron">
     <div class="container">
         <div class="row">
-            <h1 id="task" class="col-xs-12 text-center">SPRINT!!</h1>
-        </div>
-        <div class="row">
-            <p id="count" class="col-xs-12 text-center">00:00</p>
+            <div class="col-md-9">
+                <h1 id="phase" class="text-center">SPRINT!!</h1>
+
+                <p id="count" class="text-center">00:00</p>
+            </div>
+
+            <div class="list-group col-md-3">
+                <a href="#" class="list-group-item active">
+                    <h4 class="list-group-item-heading">条件設定<span class="min">(5m)</span></h4>
+
+                    <ul class="list-group-item-text">
+                        <li>予算合計上限</li>
+                        <li>サイズと枚数</li>
+                        <li>要望（食べられないもの等）</li>
+                    </ul>
+                </a>
+                <a href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">ノート作成<span class="min">(5m)</span></h4>
+
+                    <ul class="list-group-item-text">
+                        <li>条件に合うものを書き出す</li>
+                        <li>何個でもOK</li>
+                    </ul>
+                </a>
+                <a href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">CRAZY4<span class="min">(5m)</span></h4>
+
+                    <ul class="list-group-item-text">
+                        <li>自分が食べたいものを4つ書き出す</li>
+                    </ul>
+                </a>
+                <a href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">サイレント投票<span class="min">(5m)</span></h4>
+
+                    <ul class="list-group-item-text">
+                        <li>会話はせずに今日食べたいものにチェックする</li>
+                        <li>何個でもOK</li>
+                    </ul>
+                </a>
+                <a href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">注文<span class="min">(10m)</span></h4>
+
+                    <ul class="list-group-item-text">
+                        <li>1人がログインorお客様情報を入力し始める</li>
+                        <li>予算額に収まるように投票上位商品をピックアップしていく</li>
+                        <li>予算やバランスに応じて次点商品と入れ替えるなど調整する</li>
+                    </ul>
+                </a>
+            </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>
