@@ -44,7 +44,7 @@
                     $(this).removeClass('active');
                 });
                 $(this).addClass('active');
-                $('.list-group-item-text', this).slideToggle();
+                $('.list-group-item-text', this).slideToggle('fast');
                 $('#inputPhase').val($('h4', this).contents().eq(0).text());
                 $('#inputMin').val($('h4 .min', this).text().match(/\d+/));
             });
