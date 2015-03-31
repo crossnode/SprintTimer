@@ -2,35 +2,58 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>PIZZA SPRINT for 30min</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <style type="text/css">
         body {
             background: #eee;
         }
 
-        .jumbotron {
-            background: none;
-            padding-top: 100px;
-        }
-
-        #phase {
-            font-size: 800%;
-        }
-
-        #count {
-            font-size: 2000%;
-        }
-
         .list-group-item-text {
             display: none;
         }
 
-        .min {
-            padding-left: 1rem;
+        #dispPhase {
+            font-size: 400%;
+        }
+
+        #dispMin {
+            font-size: 800%;
+        }
+
+        @media screen and (min-width: 768px) {
+            #dispPhase {
+                font-size: 600%;
+            }
+
+            #dispMin {
+                font-size: 1500%;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            #dispPhase {
+                font-size: 700%;
+            }
+
+            #dispMin {
+                font-size: 1500%;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            #dispPhase {
+                font-size: 800%;
+            }
+
+            #dispMin {
+                font-size: 2000%;
+            }
         }
     </style>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
     <script>
         $(function () {
@@ -50,7 +73,7 @@
             });
         });
         function start(p, m) {
-            $('#phase').text(p);
+            $('#dispPhase').text(p);
             var now = new Date();
             endDate = new Date();
             endDate.setTime(m * 60 * 1000 + now.getTime());
@@ -73,7 +96,7 @@
                     txt = zero(h) + ':' + txt;
                 }
             }
-            $("#count").text(txt);
+            $("#dispMin").text(txt);
             setTimeout(countDown, 1000);
         }
         function zero(n) {
@@ -85,77 +108,86 @@
     </script>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-static-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">PIZZA SPRINT for 30min</a>
+            <a class="navbar-brand" href="#"><span>DESIGN SPRINT HOUR</span></a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="phase" id="inputPhase">
-                <input type="text" class="form-control" placeholder="minutes" id="inputMin">
-                <button class="btn btn-success" type="button" id="start">Start!</button>
-            </form>
-        </div>
-    </div>
-
-</nav>
-<div class="jumbotron">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <h1 id="phase" class="text-center">SPRINT!!</h1>
-
-                <p id="count" class="text-center">00:00</p>
-            </div>
-            <div class="list-group col-md-3">
-
-                <!-- h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
-                <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">条件設定<span class="min">(5分)</span></h4>
-                    <ul class="list-group-item-text">
-                        <li>予算合計上限</li>
-                        <li>サイズと枚数</li>
-                        <li>要望（食べられないもの等）</li>
-                    </ul>
-                </a>
-
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">ノート作成<span class="min">(5m)</span></h4>
-                    <ul class="list-group-item-text">
-                        <li>条件に合うものを書き出す</li>
-                        <li>何個でもOK</li>
-                    </ul>
-                </a>
-
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">CRAZY4<span class="min">(5m)</span></h4>
-                    <ul class="list-group-item-text">
-                        <li>自分が食べたいものを4つ書き出す</li>
-                    </ul>
-                </a>
-
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">サイレント投票<span class="min">(5m)</span></h4>
-                    <ul class="list-group-item-text">
-                        <li>会話はせずに今日食べたいものにチェックする</li>
-                        <li>何個でもOK</li>
-                    </ul>
-                </a>
-
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">注文<span class="min">(10m)</span></h4>
-                    <ul class="list-group-item-text">
-                        <li>1人がログインorお客様情報を入力し始める</li>
-                        <li>予算額に収まるように投票上位商品をピックアップしていく</li>
-                        <li>予算やバランスに応じて次点商品と入れ替えるなど調整する</li>
-                    </ul>
-                </a>
-
-            </div>
-        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse"></div>
     </div>
 </div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="text-center" id="dispPhase">SPRINT!!</h1>
+
+                <p class="text-center" id="dispMin">00:00</p>
+            </div>
+            <div class="col-md-4">
+                <form class="form-horizontal col-sm-4 col-md-12" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="inputPhase" placeholder="Phase">
+                            <input type="text" class="form-control" id="inputMin" placeholder="Minutes">
+                            <button type="submit" class="btn btn-block btn-success" id="start">Start!</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-8 col-md-12">
+                    <div class="list-group">
+                        <!-- h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
+                        <a href="#" class="list-group-item active">
+                            <h4 class="list-group-item-heading">条件設定
+                                <span class="min">(5分)</span>
+                            </h4>
+                            <ul class="list-group-item-text">
+                                <li>予算合計上限</li>
+                                <li>サイズと枚数</li>
+                                <li>要望（食べられないもの等）</li>
+                            </ul>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">ノート作成
+                                <span class="min">(5m)</span>
+                            </h4>
+                            <ul class="list-group-item-text">
+                                <li>条件に合うものを書き出す</li>
+                                <li>何個でもOK</li>
+                            </ul>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">CRAZY4
+                                <span class="min">(5m)</span>
+                            </h4>
+                            <ul class="list-group-item-text">
+                                <li>自分が食べたいものを4つ書き出す</li>
+                            </ul>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">サイレント投票
+                                <span class="min">(5m)</span>
+                            </h4>
+                            <ul class="list-group-item-text">
+                                <li>会話はせずに今日食べたいものにチェックする</li>
+                                <li>何個でもOK</li>
+                            </ul>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">注文
+                                <span class="min">(10m)</span>
+                            </h4>
+                            <ul class="list-group-item-text">
+                                <li>1人がログインorお客様情報を入力し始める</li>
+                                <li>予算額に収まるように投票上位商品をピックアップしていく</li>
+                                <li>予算やバランスに応じて次点商品と入れ替えるなど調整する</li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
