@@ -1,6 +1,6 @@
 # SprintTimer
 
-Timer for Sprint Ver.1.1
+Timer for Sprint Ver.1.3
 
 ## 使い方
 
