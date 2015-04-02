@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>PIZZA SPRINT for 30min</title>
+    <title>SPRINT TIMER</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -98,7 +98,9 @@
             }
         }
         function changeTitle(t) {
-            $('.navbar-brand span').text($('.list-group').eq(t).data('role'));
+            var tt = $('.list-group').eq(t).data('role');
+            $('.navbar-brand span').text(tt);
+            $('title').text(tt);
         }
         function start(p, m) {
             $('#dispPhase').text(p);
@@ -179,9 +181,9 @@
                                 <span class="min">(5分)</span>
                             </h4>
                             <ul class="list-group-item-text">
-                                <li>予算合計上限</li>
+                                <li>予算上限</li>
                                 <li>サイズと枚数</li>
-                                <li>要望（食べられないもの等）</li>
+                                <li>食べられないもの</li>
                             </ul>
                         </a>
                         <a href="#" class="list-group-item">
