@@ -1,318 +1,324 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>SPRINT TIMER</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <style type="text/css">
-        body {
-            background: #eee;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>SPRINT TIMER</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <style type="text/css">
+    body {
+      background: #eee;
+    }
+    
+    .list-group {
+      display: none;
+    }
+    
+    .list-group-item-text {
+      display: none;
+    }
+    
+    #dispPhase {
+      font-size: 400%;
+    }
+    
+    #dispMin {
+      font-size: 800%;
+    }
+    
+    @media screen and (min-width: 768px) {
+      #dispPhase {
+        font-size: 600%;
+      }
+      #dispMin {
+        font-size: 1500%;
+      }
+    }
+    
+    @media screen and (min-width: 992px) {
+      #dispPhase {
+        font-size: 700%;
+      }
+      #dispMin {
+        font-size: 1500%;
+      }
+    }
+    
+    @media screen and (min-width: 1200px) {
+      #dispPhase {
+        font-size: 800%;
+      }
+      #dispMin {
+        font-size: 2000%;
+      }
+    }
+  </style>
 
-        .list-group {
-            display: none;
-        }
-
-        .list-group-item-text {
-            display: none;
-        }
-
-        #dispPhase {
-            font-size: 400%;
-        }
-
-        #dispMin {
-            font-size: 800%;
-        }
-
-        @media screen and (min-width: 768px) {
-            #dispPhase {
-                font-size: 600%;
-            }
-
-            #dispMin {
-                font-size: 1500%;
-            }
-        }
-
-        @media screen and (min-width: 992px) {
-            #dispPhase {
-                font-size: 700%;
-            }
-
-            #dispMin {
-                font-size: 1500%;
-            }
-        }
-
-        @media screen and (min-width: 1200px) {
-            #dispPhase {
-                font-size: 800%;
-            }
-
-            #dispMin {
-                font-size: 2000%;
-            }
-        }
-    </style>
-
-    <script>
-        $(function () {
-            init();
-            // スプリント切り替え
-            $('.dropdown-menu a').click(function () {
-                var i = $('.dropdown-menu li').has(this).index();
-                $('.list-group').hide();
-                $('.list-group').eq(i).show();
-                changeTitle(i);
-            });
-            // スタートボタン
-            $('#start').click(function () {
-                start($('#inputPhase').val(), $('#inputMin').val());
-            });
-            // フェーズリストアコーディオン
-            $('.list-group-item').click(function () {
-                $('.list-group-item').each(function () {
-                    $(this).removeClass('active');
-                });
-                $(this).addClass('active');
-                $('.list-group-item-text', this).slideToggle('fast');
-                $('#inputPhase').val($('h4', this).contents().eq(0).text().match(/[^\s+$]+/));
-                $('#inputMin').val($('h4 .min', this).text().match(/\d+/));
-            });
+  <script>
+    $(function () {
+      init();
+      // スプリント切り替え
+      $('.dropdown-menu a').click(function () {
+        var i = $('.dropdown-menu li').has(this).index();
+        $('.list-group').hide();
+        $('.list-group').eq(i).show();
+        changeTitle(i);
+      });
+      // スタートボタン
+      $('#start').click(function () {
+        start($('#inputPhase').val(), $('#inputMin').val());
+      });
+      // フェーズリストアコーディオン
+      $('.list-group-item').click(function () {
+        $('.list-group-item').each(function () {
+          $(this).removeClass('active');
         });
-        function init() {
-            // ドロップダウン生成
-            $('.list-group').eq(0).show();
-            changeTitle(0);
-            var l = $('.list-group').length;
-            if (l > 1) {
-                $('.list-group').each(function () {
-                    $('.dropdown-menu').append('<li><a href="#">' + $(this).data('role') + '</a></li>');
-                });
-            } else {
-                $('.navbar-nav').hide();
-            }
+        $(this).addClass('active');
+        $('.list-group-item-text', this).slideToggle('fast');
+        $('#inputPhase').val($('h4', this).contents().eq(0).text().match(/[^\s+$]+/));
+        $('#inputMin').val($('h4 .min', this).text().match(/\d+/));
+      });
+    });
+
+    function init() {
+      console.log('init!');
+      // ドロップダウン生成
+      $('.list-group').eq(0).show();
+      changeTitle(0);
+      var l = $('.list-group').length;
+      if (l > 1) {
+        $('.list-group').each(function () {
+          $('.dropdown-menu').append('<li><a href="#">' + $(this).data('role') + '</a></li>');
+        });
+      } else {
+        $('.navbar-nav').hide();
+      }
+    }
+
+    function changeTitle(t) {
+      var tt = $('.list-group').eq(t).data('role');
+      $('.navbar-brand span').text(tt);
+      $('title').text(tt);
+    }
+
+    function start(p, m) {
+      $('#dispPhase').text(p);
+      var now = new Date();
+      endDate = new Date();
+      endDate.setTime(m * 60 * 1000 + now.getTime());
+      countDown();
+    }
+
+    function countDown() {
+      var nowDate = new Date();
+      var sands = endDate - nowDate;
+      var d = Math.floor(sands / (1000 * 60 * 60 * 24));
+      sands -= (d * (1000 * 60 * 60 * 24));
+      var h = Math.floor(sands / (1000 * 60 * 60));
+      sands -= (h * (1000 * 60 * 60));
+      var m = Math.floor(sands / (1000 * 60));
+      sands -= (m * (1000 * 60));
+      var s = Math.floor(sands / 1000);
+      var txt = 'Finish!';
+      if (endDate > nowDate) {
+        txt = zero(m) + ':' + zero(s);
+        if (h > 0) {
+          txt = zero(h) + ':' + txt;
         }
-        function changeTitle(t) {
-            var tt = $('.list-group').eq(t).data('role');
-            $('.navbar-brand span').text(tt);
-            $('title').text(tt);
-        }
-        function start(p, m) {
-            $('#dispPhase').text(p);
-            var now = new Date();
-            endDate = new Date();
-            endDate.setTime(m * 60 * 1000 + now.getTime());
-            countDown();
-        }
-        function countDown() {
-            var nowDate = new Date();
-            var sands = endDate - nowDate;
-            var d = Math.floor(sands / (1000 * 60 * 60 * 24));
-            sands -= (d * (1000 * 60 * 60 * 24));
-            var h = Math.floor(sands / (1000 * 60 * 60));
-            sands -= (h * (1000 * 60 * 60));
-            var m = Math.floor(sands / (1000 * 60));
-            sands -= (m * (1000 * 60));
-            var s = Math.floor(sands / 1000);
-            var txt = 'Finish!';
-            if (endDate > nowDate) {
-                txt = zero(m) + ':' + zero(s);
-                if (h > 0) {
-                    txt = zero(h) + ':' + txt;
-                }
-            }
-            $("#dispMin").text(txt);
-            setTimeout(countDown, 1000);
-        }
-        function zero(n) {
-            if (n < 10) {
-                n = '0' + n
-            }
-            return n;
-        }
-    </script>
+      }
+      $("#dispMin").text(txt);
+      setTimeout(countDown, 1000);
+    }
+
+    function zero(n) {
+      if (n < 10) {
+        n = '0' + n
+      }
+      return n;
+    }
+  </script>
 </head>
+
 <body>
-<div class="navbar navbar-inverse navbar-static-top">
+  <div class="navbar navbar-inverse navbar-static-top">
     <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#"><span>SPRINT TIMER</span></a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Select
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#"><span>SPRINT TIMER</span></a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Select
                         Sprint
                         <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu"></ul>
-                </li>
-            </ul>
-        </div>
+            <ul class="dropdown-menu" role="menu"></ul>
+          </li>
+        </ul>
+      </div>
     </div>
-</div>
-<div class="section">
+  </div>
+  <div class="section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="text-center" id="dispPhase">SPRINT!!</h1>
+      <div class="row">
+        <div class="col-md-8">
+          <h1 class="text-center" id="dispPhase">SPRINT!!</h1>
 
-                <p class="text-center" id="dispMin">00:00</p>
+          <p class="text-center" id="dispMin">00:00</p>
+        </div>
+        <div class="col-md-4">
+          <form class="form-horizontal col-sm-4 col-md-12" role="form">
+            <div class="form-group">
+              <div class="col-sm-12">
+                <input type="text" class="form-control" id="inputPhase" placeholder="Phase">
+                <input type="text" class="form-control" id="inputMin" placeholder="Minutes">
+                <button type="submit" class="btn btn-block btn-success" id="start">Start!</button>
+              </div>
             </div>
-            <div class="col-md-4">
-                <form class="form-horizontal col-sm-4 col-md-12" role="form">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" id="inputPhase" placeholder="Phase">
-                            <input type="text" class="form-control" id="inputMin" placeholder="Minutes">
-                            <button type="submit" class="btn btn-block btn-success" id="start">Start!</button>
-                        </div>
-                    </div>
-                </form>
-                <div class="col-sm-8 col-md-12">
-                    <!-- divのdata-roleにスプリント名、h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
-                    <div class="list-group" data-role="ピザスプリント">
-                        <a href="#" class="list-group-item active">
-                            <h4 class="list-group-item-heading">1.条件設定
+          </form>
+          <div class="col-sm-8 col-md-12">
+            <!-- divのdata-roleにスプリント名、h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
+            <div class="list-group" data-role="ピザスプリント">
+              <a href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">1.条件設定
                                 <span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>予算上限</li>
-                                <li>サイズと枚数</li>
-                                <li>食べられないもの</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">2.ノート作成
+                <ul class="list-group-item-text">
+                  <li>予算上限</li>
+                  <li>サイズと枚数</li>
+                  <li>食べられないもの</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">2.ノート作成
                                 <span class="min">(5m)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>条件に合うものを書き出す</li>
-                                <li>何個でもOK</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">3.CRAZY4
+                <ul class="list-group-item-text">
+                  <li>条件に合うものを書き出す</li>
+                  <li>何個でもOK</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">3.CRAZY4
                                 <span class="min">(5m)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>自分が食べたいものを4つ書き出す</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">4.サイレント投票
+                <ul class="list-group-item-text">
+                  <li>自分が食べたいものを4つ書き出す</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">4.サイレント投票
                                 <span class="min">(5m)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>会話はせずに今日食べたいものにチェックする</li>
-                                <li>何個でもOK</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">5.注文
+                <ul class="list-group-item-text">
+                  <li>会話はせずに今日食べたいものにチェックする</li>
+                  <li>何個でもOK</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">5.注文
                                 <span class="min">(10m)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>1人がログインorお客様情報を入力し始める</li>
-                                <li>予算額に収まるように投票上位商品をピックアップしていく</li>
-                                <li>予算やバランスに応じて次点商品と入れ替えるなど調整する</li>
-                            </ul>
-                        </a>
-                    </div>
-                    <!-- divのdata-roleにスプリント名、h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
-                    <div class="list-group" data-role="メニュースプリント">
-                        <a href="#" class="list-group-item active">
-                            <h4 class="list-group-item-heading">1.現状把握
+                <ul class="list-group-item-text">
+                  <li>1人がログインorお客様情報を入力し始める</li>
+                  <li>予算額に収まるように投票上位商品をピックアップしていく</li>
+                  <li>予算やバランスに応じて次点商品と入れ替えるなど調整する</li>
+                </ul>
+              </a>
+            </div>
+            <!-- divのdata-roleにスプリント名、h4にフェーズ名、spanに分数(数字は半角で、それ以外は書式自由）、作業内容はulに記入 -->
+            <div class="list-group" data-role="メニュースプリント">
+              <a href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">1.現状把握
                                 <span class="min">(10分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>ホットとアイスの2画面に分かれている</li>
-                                <li>アイスラテは小さい但し書きのみ</li>
-                                <li>ホットラテは記載されていない</li>
-                                <li>コーヒーの濃さの表記がわかりにくい</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">2.条件設定<span class="min">(5分)</span>
+                <ul class="list-group-item-text">
+                  <li>ホットとアイスの2画面に分かれている</li>
+                  <li>アイスラテは小さい但し書きのみ</li>
+                  <li>ホットラテは記載されていない</li>
+                  <li>コーヒーの濃さの表記がわかりにくい</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">2.条件設定<span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>2画面使うこと</li>
-                                <li>初めての人でもどんなメニューがあるか分かる</li>
-                                <li>注文時に読み上げやすい</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">3.ノート作成<span class="min">(5分)</span>
+                <ul class="list-group-item-text">
+                  <li>2画面使うこと</li>
+                  <li>初めての人でもどんなメニューがあるか分かる</li>
+                  <li>注文時に読み上げやすい</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">3.ノート作成<span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>ここまでで気になったこと</li>
-                                <li>アイデアの素</li>
-                                <li>その他キーワードや絵を書き出す</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">4.CRAZY8<span class="min">(5分)</span>
+                <ul class="list-group-item-text">
+                  <li>ここまでで気になったこと</li>
+                  <li>アイデアの素</li>
+                  <li>その他キーワードや絵を書き出す</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">4.CRAZY8<span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>アイデアを8つ紙に書き出す</li>
-                                <li>30秒で1つ書く＆10秒弱休むを8回繰り返す</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">5.ストーリーボード作成<span class="min">(10分)</span>
+                <ul class="list-group-item-text">
+                  <li>アイデアを8つ紙に書き出す</li>
+                  <li>30秒で1つ書く＆10秒弱休むを8回繰り返す</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">5.ストーリーボード作成<span class="min">(10分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>8つのアイデアを見ながら2画面の構成を絵にする</li>
-                                <li>説明しなくても分かるように絵のまわりに字を書き込む</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">6.サイレント投票<span class="min">(5分)</span>
+                <ul class="list-group-item-text">
+                  <li>8つのアイデアを見ながら2画面の構成を絵にする</li>
+                  <li>説明しなくても分かるように絵のまわりに字を書き込む</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">6.サイレント投票<span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>画面単位で良いと思うものに◯をつける</li>
-                                <li>いくつでも投票OK</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">7.3分議論<span class="min">(10分)</span>
+                <ul class="list-group-item-text">
+                  <li>画面単位で良いと思うものに◯をつける</li>
+                  <li>いくつでも投票OK</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">7.3分議論<span class="min">(10分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>票が集まったアイデアについて3分以内ずつディスカッション</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">8.最終投票<span class="min">(5分)</span>
+                <ul class="list-group-item-text">
+                  <li>票が集まったアイデアについて3分以内ずつディスカッション</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">8.最終投票<span class="min">(5分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>手持ち1票だけ投票</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">9.アイデア採択<span class="min">(10分)</span>
+                <ul class="list-group-item-text">
+                  <li>手持ち1票だけ投票</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">9.アイデア採択<span class="min">(10分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>採用するアイデアを決定</li>
-                                <li>画面単位で違う人のアイデアでもOK</li>
-                            </ul>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">10.ストーリーボード作成<span class="min">(10分)</span>
+                <ul class="list-group-item-text">
+                  <li>採用するアイデアを決定</li>
+                  <li>画面単位で違う人のアイデアでもOK</li>
+                </ul>
+              </a>
+              <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">10.ストーリーボード作成<span class="min">(10分)</span>
                             </h4>
-                            <ul class="list-group-item-text">
-                                <li>採用したアイデアの清書</li>
-                                <li>次回のプロトタイピングに向けて整理する
-                            </ul>
-                        </a>
-                    </div>
-                </div>
+                <ul class="list-group-item-text">
+                  <li>採用したアイデアの清書</li>
+                  <li>次回のプロトタイピングに向けて整理する</li>
+                </ul>
+              </a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </body>
+
 </html>
