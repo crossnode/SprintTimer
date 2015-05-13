@@ -84,8 +84,6 @@
     });
 
     function init() {
-      // URL更新
-      location.href=location.href+'?';
       // ドロップダウン生成
       $('.list-group').eq(0).show();
       changeTitle(0);
@@ -175,7 +173,7 @@
               <div class="col-sm-12">
                 <input type="text" class="form-control" id="inputPhase" placeholder="Phase">
                 <input type="text" class="form-control" id="inputMin" placeholder="Minutes">
-                <button type="submit" class="btn btn-block btn-success" id="start">Start!</button>
+                <a href="javascript:void(0)" class="btn btn-block btn-success" id="start">Start!</a>
               </div>
             </div>
           </form>
